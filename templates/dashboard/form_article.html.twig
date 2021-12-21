@@ -11,7 +11,14 @@
             <h2 class="text-muted text-center">Ajouter un nouvel article</h2>
         </div>
         <div class="col-6 mx-auto mt-4">
-            {{form(form)}}
+            {#On va ajouter l'attr qui permet de soumettre le formulaire que sous certaine conditions #}
+            {{ form(form, {'attr': {novalidate: 'novalidate'} }) }}
+
+            {#
+    {{ form_start(form, {'attr': }) }} revient à faire => <form >
+    {{ form_end(form) }} revient à faire => </form>
+#}
+
         </div>
     </div>
 </div>

@@ -4,12 +4,15 @@ namespace App\Form;
 
 use App\Entity\Article;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Length;
 
 class ArticleType extends AbstractType
 {
@@ -21,10 +24,25 @@ class ArticleType extends AbstractType
                 'required' => true,
                 'attr' => ['placeholder' => 'Entrez un titre']
             ])
+
             ->add('subtitle',TextType::class, [
                 'label' => 'Soustitre',
                 'required' => true,
-                'attr' => ['placeholder' => 'Entrez un soustitre']
+                'attr' => ['placeholder' => 'Entrez un soustitre'],
+                'constraints' => [
+
+                    new NotBlank([
+
+                        'message' => 'Ce champs ne peut être vide'
+                    ]),
+
+                    new length([
+
+                        'min' => 3,
+                        'min' => 100,
+                        'minMessage' => 'Le sous-titre doit comporter {{Limit} caractères au minimum.'
+                    ])
+                ]
             ])
             ->add('description',TextareaType::class, [
                 'label' => 'Description',
@@ -34,7 +52,15 @@ class ArticleType extends AbstractType
             ->add('picture',FileType::class, [
                 'label' => 'Photo',
                 'required' => true,
-                'attr' => ['placeholder' => 'Entrez une illustration']
+                'attr' => ['placeholder' => 'Entrez une illustration'],
+                'constraints'=> [
+
+                    new Image([
+                        'mimeTypes' => ['image/jpeg' , 'image/png'],
+                        'mimeTypesMessage' => 'Les types de fichiers autorisés sont : .jpeg / .png'
+                    ])
+                ]
+
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Ajouter',
@@ -44,9 +70,15 @@ class ArticleType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([
-            'data_class' => Article::class,
-//            'allow_file_upload' => true,
+        $resolver->setDefaults([// La configuration des paramètres par defaut
+            'data_class' => Article::class, //La liaison entre le formulaire et l'entité class se fait ici 
+            /*
+            On rajoute 'allow_file_upload' (une cléf d'une paire ($key => $value) dans un array)qui est un paramètre symfony
+            Qu'on définit à true.
+            Cela permet d'autoriser notre formulaire à importer des fichiers.
+            => revient à <form enctype=multipart/form-data> 
+            */
+            'allow_file_upload' => true, //décommenter cette ligne permet d'autoriser l'upload des images
 //            'picture' => null,
         ]);
     }
