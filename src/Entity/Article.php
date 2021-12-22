@@ -21,7 +21,7 @@ class Article
     
     /**
      * * @Assert\NotBlank(message="Ce champ ne peut etre vide")
-     * @Assert\Length(min=3, max=10, minMessage="Le titre doit comporter au minimum {{limit}} caractères.")
+     * @Assert\Length(min=3, max=255, minMessage="Le titre doit comporter au minimum {{limit}} caractères.")
      * @ORM\Column(type="string", length=255)
      */
     private $title;
