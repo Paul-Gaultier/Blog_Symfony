@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -50,12 +52,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $firstname;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Commentary::class, mappedBy="author")
+     */
+    private $commentaries;
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // Cela permet de preset certaines propriétés à l'instanciation d'un new User
     function __construct()
     {
         $this->setRoles(['ROLE_USER']);
+        $this->commentaries = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -186,6 +194,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setFirstname(string $firstname): self
     {
         $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Commentary[]
+     */
+    public function getCommentaries(): Collection
+    {
+        return $this->commentaries;
+    }
+
+    public function addCommentary(Commentary $commentary): self
+    {
+        if (!$this->commentaries->contains($commentary)) {
+            $this->commentaries[] = $commentary;
+            $commentary->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentary(Commentary $commentary): self
+    {
+        if ($this->commentaries->removeElement($commentary)) {
+            // set the owning side to null (unless already changed)
+            if ($commentary->getAuthor() === $this) {
+                $commentary->setAuthor(null);
+            }
+        }
 
         return $this;
     }
