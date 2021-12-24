@@ -9,6 +9,13 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 class CategoryFixtures extends Fixture
 {
+    /*
+    Les Fixtures sont un jeu de donnée.
+    Elles permettent d'alimenter la BDD rapidement
+    afin de pouvoir manipuler des données dans mon code => des entités
+    */
+
+
     public function __construct(SluggerInterface $slugger ){
 
         $this->slugger = $slugger;

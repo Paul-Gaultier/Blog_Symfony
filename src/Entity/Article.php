@@ -23,7 +23,7 @@ class Article
     
     /**
      * * @Assert\NotBlank(message="Ce champ ne peut etre vide")
-     * @Assert\Length(min=3, max=10, minMessage="Le titre doit comporter au minimum {{limit}} caractères.")
+     * @Assert\Length(min=3, max=255, minMessage="Le titre doit comporter au minimum {{limit}} caractères.")
      * @ORM\Column(type="string", length=255)
      */
     private $title;
@@ -55,6 +55,10 @@ class Article
     private $category;
 
     /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="articles")
+     */
+    private $User;
+
      * @ORM\OneToMany(targetEntity=Commentary::class, mappedBy="article")
      */
     private $commentaries;
@@ -64,7 +68,6 @@ class Article
         $this->commentaries = new ArrayCollection();
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////
 
     public function getId(): ?int
     {
@@ -143,6 +146,16 @@ class Article
         return $this;
     }
 
+
+    public function getUser(): ?User
+    {
+        return $this->User;
+    }
+
+    public function setUser(?User $User): self
+    {
+        $this->User = $User;
+
     /**
      * @return Collection|Commentary[]
      */
@@ -169,6 +182,7 @@ class Article
                 $commentary->setArticle(null);
             }
         }
+
 
         return $this;
     }

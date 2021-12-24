@@ -1,33 +1,55 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil{% endblock %}
+{% block title %}Accueil
+{% endblock %}
 
 {% block body %}
+
+
+	<div class="container">
+		<div class="row bg-dark">
 
 <main style="min-height:1000px">
     <div class="container">
         <div class="row">
 
-            <h1 class="col-12 text-center my-5">Tous les articles</h1>
 
-            {% for article in articles %}
+			<h1 class="col-12 text-center my-5">Tous les articles</h1>
 
-                <div class="col-md-3 my-3">
-                    <div class="card" style="width: 18rem; height: 25rem;">
-                        <img src="{{asset('uploads/' ~  article.picture)}}" class="card-img-top img-card-custom" alt="{{ article.subtitle | length > 30 ? article.subtitle|slice(0, 30) ~ '...' : article.subtitle }}">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ article.title | length > 20 ? article.title | slice(0, 20) ~ '...' : article.title }}</h5>
-                            <h6 class="card-title">{{ article.subtitle | length > 30 ? article.subtitle | slice(0, 30) ~ '...' : article.subtitle }}</h6>
-                            <p class="card-text">{{ article.description | length > 50 ? article.description | slice(0, 50) ~ '...' : article.description }}</p>
-                            <a href="{{ path( 'show_article', {'id' : article.id} ) }}" class="btn btn-warning d-block mx-auto">Voir l'article</a>
-                        </div>
-                    </div>
-                </div>
+			{% for article in articles %}
 
-            {% endfor %}
+				<div class="col-md-3 my-3">
+					<div class="card" style="width: 18rem; height: 38rem; margin-top:-100px">
+						<img src="{{asset('uploads/' ~ article.picture)}}" class="card-img-top img-card-custom" style="height:20rem" alt="{{ article.subtitle | length > 30 ? article.subtitle|slice(0, 30) ~ '...' : article.subtitle }}">
+                    <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Categorie : {{ article.category.name }}</li>
+                        </ul>
+                    <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Auteur : {{ article.user.lastname ?? '' ~ ' ' ~ article.user.firstname ?? '' }}</li>
+                        </ul>
+
+
+
+						
 
         </div>
     </div>
 </main>
+
+
+						<div class="card-body">
+                        
+							<h5 class="card-title">{{ article.title | length > 20 ? article.title | slice(0, 20) ~ '...' : article.title }}</h5>
+							<h6 class="card-title">{{ article.subtitle | length > 30 ? article.subtitle | slice(0, 30) ~ '...' : article.subtitle }}</h6>
+							<p class="card-text">{{ article.description | length > 50 ? article.description | slice(0, 50) ~ '...' : article.description }}</p>
+							<a href="{{ path( 'show_article', {'id' : article.id} ) }}" class="btn btn-warning d-block mx-auto">Voir l'article</a>
+						</div>
+					</div>
+				</div>
+
+			{% endfor %}
+
+		</div>
+	</div>
 
 {% endblock %}

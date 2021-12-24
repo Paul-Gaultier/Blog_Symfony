@@ -53,17 +53,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $firstname;
 
     /**
+
+     * @ORM\OneToMany(targetEntity=Article::class, mappedBy="User")
+     */
+    private $articles;
+
      * @ORM\OneToMany(targetEntity=Commentary::class, mappedBy="author")
      */
     private $commentaries;
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  
 
     // Cela permet de preset certaines propriétés à l'instanciation d'un new User
     function __construct()
     {
         $this->setRoles(['ROLE_USER']);
+
+        $this->articles = new ArrayCollection();
+
         $this->commentaries = new ArrayCollection();
+
     }
 
     public function getId(): ?int
@@ -199,6 +209,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
+
+     * @return Collection|Article[]
+     */
+    public function getArticles(): Collection
+    {
+        return $this->articles;
+    }
+
+    public function addArticle(Article $article): self
+    {
+        if (!$this->articles->contains($article)) {
+            $this->articles[] = $article;
+            $article->setUser($this);
+
      * @return Collection|Commentary[]
      */
     public function getCommentaries(): Collection
@@ -211,10 +235,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         if (!$this->commentaries->contains($commentary)) {
             $this->commentaries[] = $commentary;
             $commentary->setAuthor($this);
+
         }
 
         return $this;
     }
+
+
+    public function removeArticle(Article $article): self
+    {
+        if ($this->articles->removeElement($article)) {
+            // set the owning side to null (unless already changed)
+            if ($article->getUser() === $this) {
+                $article->setUser(null);
 
     public function removeCommentary(Commentary $commentary): self
     {
@@ -222,6 +255,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($commentary->getAuthor() === $this) {
                 $commentary->setAuthor(null);
+
             }
         }
 

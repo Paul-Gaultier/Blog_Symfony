@@ -8,6 +8,7 @@
     width: 100%;
     padding: 20px 0;
     background-color: black;
+    margin-top: 200px;
 }
 
 body {
@@ -30,4 +31,9 @@ table {
 .img-custom {
     height: 600px;
     object-fit: cover;
+}
+
+#fond{
+
+    background : black;
 }
