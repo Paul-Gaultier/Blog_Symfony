@@ -69,11 +69,10 @@ class ArticleController extends AbstractController
                 Ici on va vérifier la présence de getMineType, le getMineType s'assure de la bonne extension du fichier
                 */
 
-                //Elle permet de comparer deux valeurs (2 arguments attendus ici)
-                if(in_array($file->getMimeType(),$allowedMimeType)){//in_array(la valeur, le tableau concernée)
+            //Elle permet de comparer deux valeurs (2 arguments attendus ici)
+            if(in_array($file->getMimeType(),$allowedMimeType)){//in_array(la valeur, le tableau concernée)
 
-
-                    
+                     //Si le MimeType de l'image == Le MimeType de la variable comparée (ici $allowedMineType)
 
                         //Nous allons construire le nouveau nom du fichier :
 

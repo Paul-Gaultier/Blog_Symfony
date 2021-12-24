@@ -16,7 +16,7 @@ class CategoryController extends AbstractController
 
 
     /**
-     * @Route("/admin/create-categorie", name="create_category", methods={"GET|POST"})
+     * @Route("/admin/creer-categorie", name="create_category", methods={"GET|POST"})
      * 
      */
     public function createCategory(Request $request, SluggerInterface $slugger, EntityManagerInterface $entityManager)
@@ -24,6 +24,18 @@ class CategoryController extends AbstractController
         $category = new Category();
 
         $form = $this->createForm(CategoryType::class, $category)->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+
+            $category = $form->getData();
+            $category->setAlias($slugger->slug($category->getName()));
+
+            $entityManager->persist($category);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'La catégorie est bien été crée');
+            return $this->redirectToRoute('dashboard');
+        }
 
 
 
